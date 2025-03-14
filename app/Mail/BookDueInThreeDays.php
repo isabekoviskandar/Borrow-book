@@ -6,30 +6,29 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class BookBorrowed extends Mailable
+class BookDueInThreeDays extends Mailable
 {
     use Queueable, SerializesModels;
 
     public $book;
     public $user;
+    public $dueDate;
 
-    public function __construct($book, $user)
+    public function __construct($book, $user, $dueDate)
     {
         $this->book = $book;
         $this->user = $user;
+        $this->dueDate = $dueDate;
     }
 
     public function build()
     {
-        $userBook = $this->user->user_book()->where('book_id', $this->book->id)->latest()->first();
-        return $this->subject('Book Borrowed Successfully')
-                    ->view('emails.book_borrowed')
+        return $this->subject('Book Due in 3 Days')
+                    ->view('emails.three_days')
                     ->with([
                         'bookName' => $this->book->name,
                         'userName' => $this->user->name,
-                        'days' => $userBook->count,
-                        'total' => $userBook->total,
-                        'date' => $userBook->date_of_borrowing,
+                        'dueDate' => $this->dueDate,
                     ]);
     }
 }

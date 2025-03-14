@@ -14,12 +14,20 @@ class UserBook extends Model
         'user_id',
         'book_id',
         'count',
+        'date_of_borrowing',
         'total',
+        'status',
+        'due_date',
     ];
+
+    protected $casts = [
+        'date_of_borrowing' => 'date',
+    ];
+
 
     public function user()
     {
-        return $this->belongsTo(User::class , 'user_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function book()

@@ -17,7 +17,9 @@ return new class extends Migration
             $table->foreignId('book_id')->constrained('books')->onDelete('cascade');
             $table->integer('count');
             $table->integer('total');
-            $table->string('status');
+            $table->string('status')->default('available');
+            $table->date('date_of_borrowing');
+            $table->date('due_date');
             $table->timestamps();
         });
     }

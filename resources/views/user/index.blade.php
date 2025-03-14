@@ -73,9 +73,38 @@
                                 @endif
                             </p>
                             @if ($book->status == 'available')
-                                <a href="{{ route('books.borrow', $book->id) }}" class="btn btn-primary">Borrow Book</a>
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#borrowModal{{ $book->id }}">
+                                    Borrow Book
+                                </button>
+
+                                <div class="modal fade" id="borrowModal{{ $book->id }}" tabindex="-1" aria-labelledby="borrowModalLabel{{ $book->id }}" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="borrowModalLabel{{ $book->id }}">Borrow {{ $book->name }}</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <form action="{{ route('books.borrow', $book->id) }}" method="POST">
+                                                @csrf
+                                                <div class="modal-body">
+                                                    <div class="mb-3">
+                                                        <label for="days{{ $book->id }}" class="form-label">How many days would you like to borrow this book?</label>
+                                                        <input type="number" class="form-control" id="days{{ $book->id }}" name="days" min="1" required>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                    <button type="submit" class="btn btn-primary">Confirm Borrow</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
                             @else
                                 <a href="#" class="btn btn-secondary disabled">Currently Unavailable</a>
+                                @if ($book->status == 'borrowed')
+                                    <p class="mt-2"><strong>Due Date:</strong> {{ $book->userBooks()->where('status', 'borrowed')->latest()->first()->due_date ?? 'N/A' }}</p>
+                                @endif
                             @endif
                         </div>
                     </div>
