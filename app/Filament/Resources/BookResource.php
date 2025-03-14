@@ -6,12 +6,15 @@ use App\Filament\Resources\BookResource\Pages;
 use App\Filament\Resources\BookResource\RelationManagers;
 use App\Models\Book;
 use Filament\Forms;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use GuzzleHttp\Psr7\UploadedFile;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
@@ -26,6 +29,9 @@ class BookResource extends Resource
         return $form
             ->schema([
                 TextInput::make('name'),
+                FileUpload::make('image')
+                ->disk('public')
+                ->directory('uploads/covers'),
                 TextInput::make('author'),
                 TextInput::make('price'),
                 TextInput::make('status'),
@@ -38,9 +44,12 @@ class BookResource extends Resource
             ->columns([
                 TextColumn::make('id'),
                 TextColumn::make('name'),
+                ImageColumn::make('image')
+                    ->disk('public')
+                    ->square()
+                    ->size(50),
                 TextColumn::make('author'),
                 TextColumn::make('price'),
-                TextColumn::make('status'),
             ])
             ->filters([
                 //
