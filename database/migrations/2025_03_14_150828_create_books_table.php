@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('image');
             $table->string('author');
             $table->integer('price');
+            $table->integer('count');
             $table->string('status')->default('available');
             $table->timestamps();
         });

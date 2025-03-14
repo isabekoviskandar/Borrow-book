@@ -32,6 +32,7 @@ class BookResource extends Resource
                 FileUpload::make('image')
                 ->disk('public')
                 ->directory('uploads/covers'),
+                TextInput::make('count'),
                 TextInput::make('author'),
                 TextInput::make('price'),
                 TextInput::make('status'),
@@ -48,6 +49,7 @@ class BookResource extends Resource
                     ->disk('public')
                     ->square()
                     ->size(50),
+                TextColumn::make('count'),
                 TextColumn::make('author'),
                 TextColumn::make('price'),
             ])
