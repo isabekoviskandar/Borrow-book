@@ -2,31 +2,25 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class UserBook extends Model
 {
-    use HasFactory;
+    protected $fillable = ['user_id', 'book_id', 'count', 'total', 'borrow_days', 'emailed_at'];
 
-
-    protected $fillable =
-    [
-        'user_id',
-        'book_id',
-        'count',
-        'total',
-        'borrow_days',
-
-    ];
-
-    public function user_book()
+    /**
+     * Get the user that borrowed the book.
+     */
+    public function user()
     {
-        return $this->belongsTo(User::class , 'user_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function book_user()
+    /**
+     * Get the book being borrowed.
+     */
+    public function book()
     {
-        return $this->belongsTo(Book::class , 'book_id');
+        return $this->belongsTo(Book::class, 'book_id');
     }
 }

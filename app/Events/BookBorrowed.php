@@ -27,13 +27,17 @@ class BookBorrowed implements ShouldBroadcast
 
     public function broadcastWith()
     {
+        $bookName = $this->borrow->book ? $this->borrow->book->name : 'Unknown Book';
+        $bookStock = $this->borrow->book ? $this->borrow->book->count : 0;
+        $userName = $this->borrow->user ? $this->borrow->user->name : 'Unknown User';
+
         return [
             'book_id' => $this->borrow->book_id,
-            'name' => $this->borrow->book->name,
+            'name' => $bookName,
             'count' => $this->borrow->count,
             'borrow_days' => $this->borrow->borrow_days,
-            'stock' => $this->borrow->book->count,
-            'user' => $this->borrow->user->name,
+            'stock' => $bookStock,
+            'user' => $userName,
         ];
     }
 }

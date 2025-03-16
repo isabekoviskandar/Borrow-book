@@ -6,7 +6,7 @@ use App\Models\Book;
 use App\Models\UserBook;
 use Illuminate\Http\Request;
 
-class IndexController extends Controller
+class BookController extends Controller
 {
     public function index()
     {
@@ -18,11 +18,10 @@ class IndexController extends Controller
     {
         $request->validate([
             'count' => 'required|integer|min:1',
-            'borrow_days' => 'required|integer|min:1|max:30', // Example: max 30 days
+            'borrow_days' => 'required|integer|min:1|max:30',
         ]);
 
         $book = Book::findOrFail($bookId);
-
         if ($book->count < $request->count) {
             return back()->with('error', 'Not enough books in stock.');
         }
@@ -36,13 +35,14 @@ class IndexController extends Controller
             'count' => $request->count,
             'total' => $total,
             'borrow_days' => $request->borrow_days,
+            // 'emailed_at' => null (default, don’t set it here)
         ]);
 
         $book->decrement('count', $request->count);
 
-        // Trigger WebSocket event
         event(new \App\Events\BookBorrowed($borrow));
 
         return back()->with('success', 'Book borrowed successfully!');
     }
+
 }

@@ -21,12 +21,17 @@ class SendBorrowEmails extends Command
         }
 
         foreach ($borrows as $borrow) {
+            if (!$borrow->user) {
+                $this->error("Skipping borrow ID {$borrow->id}: No associated user (user_id: {$borrow->user_id})");
+                continue;
+            }
+
             try {
                 Mail::to($borrow->user->email)->send(new BookBorrowedMail($borrow));
                 $borrow->update(['emailed_at' => now()]);
                 $this->info("Email sent to {$borrow->user->email} for {$borrow->book->name}");
             } catch (\Exception $e) {
-                $this->error("Failed to send email to {$borrow->user->email}: " . $e->getMessage());
+                $this->error("Failed to send email for borrow ID {$borrow->id}: " . $e->getMessage());
             }
         }
         $this->info('Borrow emails processed successfully!');

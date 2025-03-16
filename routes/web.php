@@ -1,11 +1,11 @@
 <?php
 
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\IndexController;
+use App\Http\Controllers\BookController;
 use Illuminate\Support\Facades\Route;
 
 // Public routes
-Route::get('/' , [IndexController::class , 'index']);
+Route::get('/', [BookController::class, 'index']);
 
 // Authentication routes
 Route::middleware('guest')->group(function () {
@@ -17,8 +17,7 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-
 });
 
-Route::get('/books', [App\Http\Controllers\IndexController::class, 'index'])->name('books.index');
-Route::middleware('auth')->post('/books/{book}/borrow', [App\Http\Controllers\IndexController::class, 'borrow'])->name('books.borrow');
+Route::get('/books', [App\Http\Controllers\BookController::class, 'index'])->name('books.index');
+Route::middleware('auth')->post('/books/{book}/borrow', [App\Http\Controllers\BookController::class, 'borrow'])->name('books.borrow');
