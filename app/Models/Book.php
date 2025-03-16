@@ -16,4 +16,10 @@ class Book extends Model
         'count',
         'price',
     ];
+
+
+    public function book_user()
+    {
+        return $this->hasMany(UserBook::class , 'book_id');
+    }
 }
